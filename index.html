@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimeFlix - Ultimate Anime Streaming</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8a2be2;
+            --primary-dark: #6a0dad;
+            --secondary: #ff3864;
+            --dark: #121212;
+            --dark-light: #1e1e2e;
+            --text: #f8f8f8;
+            --text-secondary: #b0b0b0;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--text);
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, transparent 100%);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            padding: 20px 0;
+            transition: background 0.3s ease;
+        }
+
+        header.scrolled {
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--secondary);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav li {
+            margin: 0 15px;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        nav a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--secondary);
+            transition: width 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--secondary);
+        }
+
+        nav a:hover:after {
+            width: 100%;
+        }
+
+        .search-container {
+            position: relative;
+            margin-right: 20px;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            padding: 10px 15px;
+            padding-right: 40px;
+            border-radius: 25px;
+            color: var(--text);
+            width: 250px;
+            transition: all 0.3s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            width: 300px;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            margin-bottom: 50px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1633328562353-69bc5c043b63?q=80') center/cover no-repeat;
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            padding: 0 30px;
+        }
+
+        .hero-badge {
+            background: var(--secondary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .hero-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: var(--text-secondary);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn i {
+            margin-right: 8px;
+        }
+
+        /* Anime Sections */
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title:after {
+            content: '';
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary), transparent);
+            margin-left: 20px;
+        }
+
+        .anime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .anime-card {
+            background: var(--dark-light);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .anime-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .anime-card-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .anime-card:hover .anime-card-img {
+            transform: scale(1.1);
+        }
+
+        .anime-card-content {
+            padding: 15px;
+        }
+
+        .anime-card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .anime-card-genre {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .anime-card-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .anime-card-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .watch-btn {
+            background: var(--primary);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .watch-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .fav-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        .fav-btn:hover, .fav-btn.active {
+            color: var(--secondary);
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            color: #ffc107;
+        }
+
+        /* Categories Section */
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 60px;
+        }
+
+        .category {
+            background: var(--dark-light);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s;
+        }
+
+        .category:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-light);
+            padding: 50px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-column h3 {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .search-box {
+                width: 180px;
+            }
+            
+            .search-box:focus {
+                width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero {
+                height: auto;
+                padding: 100px 0 50px;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .anime-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .search-box {
+                width: 100%;
+                margin: 10px 0;
+            }
+            
+            .anime-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <i class="fas fa-dragon"></i>
+                    AnimeFlix
+                </a>
+                
+                <nav>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Popular</a></li>
+                        <li><a href="#">Movies</a></li>
+                        <li><a href="#">New Releases</a></li>
+                        <li><a href="#">My List</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="search-container">
+                    <input type="text" class="search-box" placeholder="Search anime...">
+                    <button class="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <span class="hero-badge">New Season</span>
+                <h1 class="hero-title">Demon Slayer: Infinity Train</h1>
+                <p class="hero-description">Tanjiro and his friends join the Flame Hashira Kyojuro Rengoku on a mission to investigate a demon terrorizing the trains.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary"><i class="fas fa-play"></i> Watch Now</a>
+                    <a href="#" class="btn btn-secondary"><i class="fas fa-plus"></i> My List</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Popular Anime -->
+        <section>
+            <h2 class="section-title">Popular Now</h2>
+            <div class="anime-grid">
+                <!-- Anime Card 1 -->
+                <div class="anime-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/cc262a8d-f022-4d29-ab5e-3b1023bd0957.png" alt="Dynamic poster of a bald hero in a yellow suit posing powerfully against a city backdrop" class="anime-card-img">
+                    <div class="anime-card-content">
+                        <h3 class="anime-card-title">One Punch Man</h3>
+                        <div class="anime-card-genre">Action, Comedy</div>
+                        <p class="anime-card-description">A hero who defeats villains with one punch, seeking a worthy opponent in a world full of monsters and superheroes.</p>
+                        <div class="anime-card-actions">
+                            <a href="#" class="watch-btn">Watch</a>
+                            <button class="fav-btn"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Anime Card 2 -->
+                <div class="anime-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/29128c54-2057-403c-9ab6-381b24162411.png" alt="Epic landscape poster showing armored warriors on massive titans amidst foggy mountains" class="anime-card-img">
+                    <div class="anime-card-content">
+                        <h3 class="anime-card-title">Attack on Titan</h3>
+                        <div class="anime-card-genre">Action, Drama</div>
+                        <p class="anime-card-description">Humans fight giant titans in a walled society where survival is key to unraveling the mysteries of their world.</p>
+                        <div class="anime-card-actions">
+                            <a href="#" class="watch-btn">Watch</a>
+                            <button class="fav-btn"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Anime Card 3 -->
+                <div class="anime-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/35310551-1789-4586-b482-4afbf71d2372.png" alt="Vibrant ninja poster with a boy leaping through a lush forest" class="anime-card-img">
+                    <div class="anime-card-content">
+                        <h3 class="anime-card-title">Naruto Shippuden</h3>
+                        <div class="anime-card-genre">Adventure, Fantasy</div>
+                        <p class="anime-card-description">A young ninja's journey to become Hokage and uncover his heritage while protecting his village from threats.</p>
+                        <div class="anime-card-actions">
+                            <a href="#" class="watch-btn">Watch</a>
+                            <button class="fav-btn"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Anime Card 4 -->
+                <div class="anime-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/571d9035-a272-4a0c-9932-8f48f44beed6.png" alt="Haunting anime art of a demon hunter with a nichirin sword in a misty forest" class="anime-card-img">
+                    <div class="anime-card-content">
+                        <h3 class="anime-card-title">Demon Slayer</h3>
+                        <div class="anime-card-genre">Action, Supernatural</div>
+                        <p class="anime-card-description">A boy becomes a demon slayer to save his sister cursed by dark forces in Taisho-era Japan.</p>
+                        <div class="anime-card-actions">
+                            <a href="#" class="watch-btn">Watch</a>
+                            <button class="fav-btn"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trending Anime -->
+        <section>
+            <h2 class="section-title">Trending This Week</h2>
+            <div class="anime-grid">
+                <!-- Anime Card 5 -->
+                <div class="anime-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/03640437-ff86-48d6-9bf8-9f697d8beafe.png" alt="Explosive superhero academy poster featuring students with powers" class="anime-card-img">
+                    <div class="anime-card-content">
+                        <h3 class="anime-card-title">My Hero Academia</h3>
+                        <div class="anime-card-genre">Action, Superhero</div>
+                        <p class="anime-card-description">Students at a hero school develop powers to fight villains in a world where almost everyone has super abilities.</p>
+                        <div class="anime-card-actions">
+                            <a href="#" class="watch-btn">Watch</a>
+                            <button class="fav-btn"><i class="far fa-heart"></i></button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Anime Card 6 -->
+                <div class="anime-card">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/b111b822-4b92-41a2-b99c-72252434c1ce.png" alt="Sinister manga-style poster of a young man holding an ominous black notebook" class="anime-card-img">
+                    <div class="anime-card-content">
+                        <h3 class="anime-card-title">Death Note</h3>
+               
